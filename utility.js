@@ -1,6 +1,7 @@
 var config = require('./config');
 var fs = require('fs');
 var path_processed = config.processed;
+var path_temp = config.temp;
 var exec = require('child_process').exec;
 var bluebird = require('bluebird');
 var fields  = config.fields;
@@ -18,7 +19,7 @@ exports.combine_spark_output = dir => {
 function process_file(f, dir) {
   return new Promise((resolve, reject) => {
     var records = {};
-    var data = fs.readFileSync(path_processed + dir + '/' + f, 'utf8');
+    var data = fs.readFileSync(path_temp + dir + '/' + f, 'utf8');
     var lines = data.split(/\n/);
     lines.forEach(l => {
       var vals = l.split(/,/).reduce((h, val, index) => {
