@@ -22,16 +22,6 @@ function process_file(file) {
     async.waterfall([
 
       function(callback) {
-        var command = 'rm -rf ' + path_processed + '*';
-        exec(command, (err, stdout, stderr) => {
-          if (err) {
-            console.error(err);
-          }
-          callback(null)
-        });
-      },
-
-      function(callback) {
         console.log('delete path_temp:', path_temp);
         var command = 'rm -rf ' + path_temp + '*';
         exec(command, (err, stdout, stderr) => {
