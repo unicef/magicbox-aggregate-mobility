@@ -35,24 +35,23 @@ function process_file(f, dir) {
       }
     });
 
-    Object.keys(records).forEach(week => {
+    bluebird.each(Object.keys(records), week => {
       var year = records[week][0].year;
       var date = moment(year + '-01-01').add(week -1, 'weeks').format('YYYY-MM-DD');
-      bluebird.each(records[week], r => {
-        return create_or_append(config.processed + date + '.csv', r)
-      }).catch(console.log).then(resolve);
-    });
+      return create_or_append(config.processed + date + '.csv', records[week])
+    }).catch(console.log).then(resolve);
   })
 }
 
-function create_or_append(path, d) {
+function create_or_append(path, week_ary) {
+  var csv = week_ary.reduce((s, d) => { s += [d.origin, d.destination, d.count] + '\n'; return s;}, '');
   return new Promise((resolve, reject)  => {
     fs.exists(path, exists => {
       if (exists) {
-        fs.appendFileSync(path, [d.origin, d.destination,d.count] + '\n')
+        fs.appendFileSync(path, csv + '\n')
       } else {
         fs.writeFileSync(path, 'orig, dest, cnt' + '\n')
-        fs.appendFileSync(path, [d.origin, d.destination, d.count] + '\n')
+        fs.appendFileSync(path, csv + '\n')
       }
       resolve();
     });
