@@ -61,7 +61,7 @@ function process_file(file) {
       },
 
       function(unzipped_file, callback) {
-        aggregate.aggregate(unzipped_file, path_unzipped, path_processed)
+        aggregate.aggregate(unzipped_file, path_unzipped, path_temp)
         .then(() => {
           callback(null, unzipped_file)
         })
