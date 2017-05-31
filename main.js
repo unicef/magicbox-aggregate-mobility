@@ -32,7 +32,8 @@ function process_file(file) {
       },
 
       function(callback) {
-        var command = 'rm ' + path_temp + '*';
+        console.log('delete path_temp:', path_temp);
+        var command = 'rm -rf ' + path_temp + '*';
         exec(command, (err, stdout, stderr) => {
           if (err) {
             console.error(err);
@@ -67,12 +68,14 @@ function process_file(file) {
         })
       },
 
-      function(callback) {
+      function(unzipped_file, callback) {
+        console.log('Start combining');
         util.combine_spark_output(file.replace(/.gz$/, ''))
         .catch(function(err) {
           console.log(err);
         })
         .then(function() {
+          console.log('Done combining');
           callback(null, unzipped_file);
         });
       },

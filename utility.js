@@ -7,12 +7,12 @@ var bluebird = require('bluebird');
 var fields  = config.fields;
 var moment = require('moment');
 exports.combine_spark_output = dir => {
-  var files = fs.readdirSync(path_processed + dir).filter(f => { return f.match(/csv$/) });
+  var files = fs.readdirSync(path_temp + dir).filter(f => { return f.match(/csv$/) });
   return new Promise(function(resolve, reject) {
     bluebird.each(files, f => {
-      console.log(f)
+      console.log('File', f)
         return process_file(f, dir);
-    }).then(resolve);
+    }).catch((err) => { console.log(err, 'eeee');} ).then(() => {console.log('done all files'); resolve()});
   });
 };
 
@@ -40,7 +40,7 @@ function process_file(f, dir) {
       var date = moment(year + '-01-01').add(week -1, 'weeks').format('YYYY-MM-DD');
       bluebird.each(records[week], r => {
         return create_or_append(config.processed + date + '.csv', r)
-      }).then(resolve);
+      }).catch(console.log).then(resolve);
     });
   })
 }
