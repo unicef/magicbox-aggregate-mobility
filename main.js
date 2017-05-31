@@ -4,7 +4,7 @@ var fs = require('fs');
 var bluebird = require('bluebird');
 var exec = require('child_process').exec;
 var config = require('./config');
-var zipped = fs.readdirSync(config.zipped);
+var zipped = fs.readdirSync(config.zipped).filter(f => { return f.match(/_W_/); });
 var unzipped_files = fs.readdirSync(config.unzipped);
 var path_unzipped = config.unzipped;
 var path_processed = config.processed;
@@ -79,7 +79,7 @@ function process_file(file) {
 
     ], () => {
         console.log("Done aggregating!!!");
-        // callback();
+        resolve();
       }, 1);
   })
 }

@@ -38,7 +38,7 @@ function process_file(f, dir) {
       var year = records[week][0].year;
       var date = moment(year + '-01-01').add(week -1, 'weeks').format('YYYY-MM-DD');
       bluebird.each(records[week], r => {
-        return create_or_append(config.temp + date + '.csv', r)
+        return create_or_append(config.processed + date + '.csv', r)
       }).then(resolve);
     });
   })
