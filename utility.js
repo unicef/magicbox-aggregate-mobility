@@ -20,6 +20,9 @@ function process_file(f, dir) {
   return new Promise((resolve, reject) => {
     var records = {};
     var data = fs.readFileSync(path_temp + dir + '/' + f, 'utf8');
+    if (!data) {
+      return resolve();
+    }
     var lines = data.split(/\n/);
     lines.forEach(l => {
       var vals = l.split(/,/).reduce((h, val, index) => {
