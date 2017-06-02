@@ -1,25 +1,30 @@
 var config = require('./config');
 var fs = require('fs');
-var path_processed = config.processed;
-var path_temp = config.temp;
 var exec = require('child_process').exec;
 var bluebird = require('bluebird');
 var fields  = config.fields;
 var moment = require('moment');
-exports.combine_spark_output = dir => {
-  var files = fs.readdirSync(path_temp + dir).filter(f => { return f.match(/csv$/) });
+
+
+/**
+ * Combines spark output to singl
+ * @param{String} file - name of CSV
+ * @return{Promise} Fulfilled when records are returned
+ */
+exports.combine_spark_output = (file, path_temp, path_summarized) => {
+  var files = fs.readdirSync(path_temp + file).filter(f => { return f.match(/csv$/) });
   return new Promise(function(resolve, reject) {
     bluebird.each(files, f => {
       console.log('File', f)
-        return process_file(f, dir);
-    }).catch((err) => { console.log(err, 'eeee');} ).then(() => {console.log('done all files'); resolve()});
+        return process_file(f, file, path_temp, path_summarized);
+    }).catch((err) => { return reject(err);} ).then(() => {console.log('done all files'); resolve()});
   });
 };
 
-function process_file(f, dir) {
+function process_file(f, file_named_dir, path_temp, path_summarized) {
   return new Promise((resolve, reject) => {
     var records = {};
-    var data = fs.readFileSync(path_temp + dir + '/' + f, 'utf8');
+    var data = fs.readFileSync(path_temp + file_named_dir + '/' + f, 'utf8');
     if (!data) {
       return resolve();
     }
@@ -41,7 +46,7 @@ function process_file(f, dir) {
     bluebird.each(Object.keys(records), week => {
       var year = records[week][0].year;
       var date = moment(year + '-01-01').add(week -1, 'weeks').format('YYYY-MM-DD');
-      return create_or_append(config.processed + date + '.csv', records[week])
+      return create_or_append(path_summarized + date + '.csv', records[week])
     }).catch(console.log).then(resolve);
   })
 }

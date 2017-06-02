@@ -43,7 +43,6 @@ bluebird.each(zipped_csv_files, file => {
 function process_file(file) {
   return new Promise((resolve, reject) => {
     async.waterfall([
-
       // Delete everything in temp directory
       function(callback) {
         console.log('delete path_temp:', path_temp);
@@ -90,7 +89,15 @@ function process_file(file) {
       // Combine all the output
       function(unzipped_file, callback) {
         console.log('Start combining');
-        util.combine_spark_output(file.replace(/.gz$/, ''))
+        console.log(file.replace(/.gz$/, ''),
+        path_temp,
+        path_processed
+      )
+        util.combine_spark_output(
+          file.replace(/.gz$/, ''),
+          path_temp,
+          path_processed
+        )
         .catch(function(err) {
           console.log(err);
         })
