@@ -43,10 +43,11 @@ bluebird.each(zipped_csv_files, file => {
 function process_file(file) {
   return new Promise((resolve, reject) => {
     async.waterfall([
+
       // Delete everything in temp directory
       function(callback) {
-        console.log('delete path_temp:', path_temp);
-        var command = 'rm -rf ' + path_temp + '*';
+        console.log('delete path_processed:', path_processed);
+        var command = 'rm ' + path_processed + '*';
         exec(command, (err, stdout, stderr) => {
           if (err) {
             console.error(err);
@@ -55,15 +56,9 @@ function process_file(file) {
         });
       },
 
-      // Delete everything in unzipped directory
       function(callback) {
-        var command = 'rm ' + path_unzipped + '*';
-        exec(command, (err, stdout, stderr) => {
-          if (err) {
-            console.error(err);
-          }
-          callback(null)
-        });
+        clean_directories()
+        .then(callback);
       },
 
       // Unzip file to process
@@ -109,6 +104,51 @@ function process_file(file) {
 
     ], () => {
         console.log("Done aggregating!!!");
+        clean_directories()
+        .then(resolve);
+      }, 1);
+  })
+}
+
+function clean_directories() {
+  return new Promise((resolve, reject) => {
+    async.waterfall([
+      // Delete everything in temp directory
+      function(callback) {
+        console.log('delete path_processed:', path_processed);
+        var command = 'rm ' + path_processed + '*';
+        exec(command, (err, stdout, stderr) => {
+          if (err) {
+            console.error(err);
+          }
+          callback(null)
+        });
+      },
+
+      // Delete everything in temp directory
+      function(callback) {
+        console.log('delete path_temp:', path_temp);
+        var command = 'rm -rf ' + path_temp + '*';
+        exec(command, (err, stdout, stderr) => {
+          if (err) {
+            console.error(err);
+          }
+          callback(null)
+        });
+      },
+
+      // Delete everything in unzipped directory
+      function(callback) {
+        var command = 'rm ' + path_unzipped + '*';
+        exec(command, (err, stdout, stderr) => {
+          if (err) {
+            console.error(err);
+          }
+          callback(null)
+        });
+      }
+    ], () => {
+        console.log("Done cleaning!!!");
         resolve();
       }, 1);
   })
