@@ -7,29 +7,52 @@ var moment = require('moment');
 
 
 /**
- * Combines spark output to singl
- * @param{String} file - name of CSV
+ * Combines spark output to files by week date
+ * @param{String} file_named_dir - name of CSV that spark uses to create dir to store output
+ * @param{String} path_temp - directory where spark stores output
+ * @param{String} path_summarized - diretory to store summarized travel by week
  * @return{Promise} Fulfilled when records are returned
  */
-exports.combine_spark_output = (file, path_temp, path_summarized) => {
-  var files = fs.readdirSync(path_temp + file).filter(f => { return f.match(/csv$/) });
-  return new Promise(function(resolve, reject) {
+exports.combine_spark_output = (
+  file_named_dir, // Example: unicef_traffic_W_2017_01.csv
+  path_temp,
+  path_summarized
+) => {
+  // Slurp file names of spark output: Example: part-r-00000-78d8da1e-4612-40fb-ad03-3eacfc0214d6.csv
+  var files = fs.readdirSync(path_temp + file_named_dir).filter(f => { return f.match(/csv$/) });
+  return new Promise((resolve, reject) => {
     bluebird.each(files, f => {
-      console.log('File', f)
-        return process_file(f, file, path_temp, path_summarized);
-    }).catch((err) => { return reject(err);} ).then(() => {console.log('done all files'); resolve()});
+      console.log('File', f);
+      return process_file(f, file_named_dir, path_temp, path_summarized);
+    }).catch(reject)
+    .then(() => {
+      console.log('done all files');
+      resolve();
+    });
   });
 };
 
+/**
+ * Create or append travel by file titled with date of week
+ * Create hash with week number as key and array of records for that week as value
+ * @param{String} file output by spark - part-r-00000-78d8da1e-4612-40fb-ad03-3eacfc0214d6.csv
+ * @param{String} file_named_dir - name of CSV that spark uses to create dir to store output
+ * @param{String} path_temp - directory where spark stores output
+ * @param{String} path_summarized - diretory to store summarized travel by week
+ * @return{Promise} Fulfilled when records are returned
+ */
 function process_file(f, file_named_dir, path_temp, path_summarized) {
   return new Promise((resolve, reject) => {
     var records = {};
     var data = fs.readFileSync(path_temp + file_named_dir + '/' + f, 'utf8');
+    // Sometimes spark files are empty
     if (!data) {
       return resolve();
     }
     var lines = data.split(/\n/);
     lines.forEach(l => {
+      // Split line by ',' and map items to fields: ['year', 'week', 'count', 'origin', 'destination']
+      // vals is an object: {year: 2017, week: 3, origin: 'US', destination: 'MX', cnt: 100}
       var vals = l.split(/,/).reduce((h, val, index) => {
         h[fields[index++]] = val;
         return h
@@ -51,7 +74,14 @@ function process_file(f, file_named_dir, path_temp, path_summarized) {
   })
 }
 
+/**
+ * Create or append travel by file titled with date of week
+ * @param{String} path - path to directory where records summarized by week are stored.
+ * @param{Array} week_ary - array of records per that week
+ * @return{Promise} Fulfilled when records are returned
+ */
 function create_or_append(path, week_ary) {
+  console.log(path, "!!!!")
   var csv = week_ary.reduce((s, d) => { s += [d.origin, d.destination, d.count] + '\n'; return s;}, '');
   return new Promise((resolve, reject)  => {
     fs.exists(path, exists => {
