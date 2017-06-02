@@ -13,5 +13,9 @@
     "bluebird": "^3.5.0",
     "child_process": "^1.0.2",
     "moment": "^2.18.1"
+  },
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-config-google": "^0.7.1"
   }
 }
