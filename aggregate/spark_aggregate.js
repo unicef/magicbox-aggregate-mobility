@@ -1,4 +1,4 @@
-var sys = require('sys')
+var util = require('util');
 var exec = require('child_process').exec;
 var aggregate = require('../aggregate/spark_aggregate');
 var child;
@@ -12,8 +12,8 @@ exports.aggregate = function(file, path_unzipped, path_temp) {
 
     child = exec(
       command, function (error, stdout, stderr) {
-        sys.print('stdout: ' + stdout);
-        sys.print('stderr: ' + stderr);
+        util.print('stdout: ' + stdout);
+        util.print('stderr: ' + stderr);
         if (error !== null) {
           console.log('exec error: ' + error);
         }
