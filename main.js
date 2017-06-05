@@ -62,8 +62,8 @@ function process_file(file, date_lookup) {
     async.waterfall([
       // Delete everything in temp directory
       function(callback) {
-        console.log('delete path_processed:', path_processed);
-        var command = 'rm ' + path_processed + '*';
+        console.log('delete path_temp:', path_temp);
+        var command = 'rm ' + path_temp + '*';
         exec(command, (err, stdout, stderr) => {
           if (err) {
             console.error(err);
@@ -130,18 +130,6 @@ function process_file(file, date_lookup) {
 function clean_directories() {
   return new Promise((resolve, reject) => {
     async.waterfall([
-      // Delete everything in temp directory
-      function(callback) {
-        console.log('delete path_processed:', path_processed);
-        var command = 'rm ' + path_processed + '*';
-        exec(command, (err, stdout, stderr) => {
-          if (err) {
-            console.error(err);
-          }
-          callback(null)
-        });
-      },
-
       // Delete everything in temp directory
       function(callback) {
         console.log('delete path_temp:', path_temp);
