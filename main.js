@@ -8,6 +8,7 @@ var fs = require('fs');
 var bluebird = require('bluebird');
 var exec = require('child_process').exec;
 var config = require('./config');
+const csv=require('csvtojson');
 
 // Get list of all zipped csv files.
 var zipped_csv_files = fs.readdirSync(config.zipped).filter(f => {
@@ -26,24 +27,39 @@ var path_processed = config.processed;
 // Has method to combine spark output
 var util = require('./utility');
 
-// Iterate through CSVs
-// aggregate it with spark
-// summarize output
-bluebird.each(zipped_csv_files, file => {
-  console.log('Processing', file);
-  return process_file(file);
-}, {concurreny: 1})
-.then(process.exit);
+
+async.waterfall([
+  // Delete everything in temp directory
+  function(callback) {
+    get_date_lookup()
+    .then(date_lookup => {
+      callback(null, date_lookup);
+    })
+  },
+
+  function(date_lookup, callback) {
+    // Iterate through CSVs
+    // aggregate it with spark
+    // summarize output
+    bluebird.each(zipped_csv_files, file => {
+      console.log('Processing', file);
+      return process_file(file, date_lookup);
+    }, {concurreny: 1})
+    .then(resolve);
+  }
+], () => {
+    console.log('Done with all!!!');
+    proces.exit();
+  }, 1);
 
 /**
  * Iterate through CSVs, aggregate it with spark, summarize output
  * @param{String} file - name of CSV
  * @return{Promise} Fulfilled when records are returned
  */
-function process_file(file) {
+function process_file(file, date_lookup) {
   return new Promise((resolve, reject) => {
     async.waterfall([
-
       // Delete everything in temp directory
       function(callback) {
         console.log('delete path_processed:', path_processed);
@@ -91,7 +107,8 @@ function process_file(file) {
         util.combine_spark_output(
           file.replace(/.gz$/, ''),
           path_temp,
-          path_processed
+          path_processed,
+          date_lookup
         )
         .catch(function(err) {
           console.log(err);
@@ -151,5 +168,30 @@ function clean_directories() {
         console.log("Done cleaning!!!");
         resolve();
       }, 1);
+  })
+}
+
+/**
+ * Amadeus weeks do not necessarily begin on the first of the year
+ * Create lookup of first week to an exact date based on traffic_weeks_definitions.csv
+ * @return{Promise} Fulfilled when date_lookup object is fully formed
+ */
+function get_date_lookup() {
+  seen = {};
+  var date_lookup = {};
+  return new Promise((resolve, reject) => {
+    const csvFilePath='./traffic_weeks_definitions.csv';
+    csv({delimiter: ';'})
+    .fromFile(csvFilePath)
+    .on('json', (jsonObj) => {
+      if (!seen[jsonObj.nYear]) {
+        date_lookup[parseInt(jsonObj.nYear)] = jsonObj.datStart;
+      }
+      seen[jsonObj.nYear] = 1;
+    })
+    .on('done',(error)=>{
+      console.log('end read traffic_weeks_definitions')
+      return resolve(date_lookup);
+    })
   })
 }

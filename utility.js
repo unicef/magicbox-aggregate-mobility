@@ -16,14 +16,15 @@ var moment = require('moment');
 exports.combine_spark_output = (
   file_named_dir, // Example: unicef_traffic_W_2017_01.csv
   path_temp,
-  path_summarized
+  path_summarized,
+  date_lookup
 ) => {
   // Slurp file names of spark output: Example: part-r-00000-78d8da1e-4612-40fb-ad03-3eacfc0214d6.csv
   var files = fs.readdirSync(path_temp + file_named_dir).filter(f => { return f.match(/csv$/) });
   return new Promise((resolve, reject) => {
     bluebird.each(files, f => {
       console.log('File', f);
-      return process_file(f, file_named_dir, path_temp, path_summarized);
+      return process_file(f, file_named_dir, path_temp, path_summarized, date_lookup);
     }).catch(reject)
     .then(() => {
       console.log('done all files');
@@ -41,7 +42,7 @@ exports.combine_spark_output = (
  * @param{String} path_summarized - diretory to store summarized travel by week
  * @return{Promise} Fulfilled when records are returned
  */
-function process_file(f, file_named_dir, path_temp, path_summarized) {
+function process_file(f, file_named_dir, path_temp, path_summarized, date_lookup) {
   return new Promise((resolve, reject) => {
     var records = {};
     var data = fs.readFileSync(path_temp + file_named_dir + '/' + f, 'utf8');
@@ -68,7 +69,7 @@ function process_file(f, file_named_dir, path_temp, path_summarized) {
 
     bluebird.each(Object.keys(records), week => {
       var year = records[week][0].year;
-      var date = moment(year + '-01-01').add(week -1, 'weeks').format('YYYY-MM-DD');
+      var date = moment(date_lookup[year]).add(week -1, 'weeks').format('YYYY-MM-DD');
       return create_or_append(path_summarized + date + '.csv', records[week])
     }).catch(console.log).then(resolve);
   })
