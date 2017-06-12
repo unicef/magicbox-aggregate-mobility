@@ -1,0 +1,10 @@
+origin_airport	origin_city	origin_country	origin_continent	origin_iata_region	origin_unwto_region	destination_airport	destination_city	destination_country	destination_continent	destination_iata_region	destination_unwto_region	via_airport_1	via_city_1	via_country_1	via_continent_1	via_iata_region_1	via_unwto_region_1	via_airport_2	via_city_2	via_country_2	via_continent_2	via_iata_region_2	via_unwto_region_2	traffic_estimation	traffic_estimation_first	traffic_estimation_business	traffic_estimation_economy	route	operating_carrier_1	operating_carrier_2	operating_carrier_3	day_pattern	year	week
+MAM	MAM	MX	North America	NOA	2	PMI	PMI	ES	Europe	EUR	4	MEX	MEX	MX	North America	NOA	2	MAD	MAD	ES	Europe	EUR	4	0	0	0	0	MAM-MEX-MAD-PMI	AM	AM	UX	22 4 64 75 	2015	1
+ACV	ACV	US	North America	NOA	2	KBP	IEV	UA	Europe	EUR	4	SFO	SFO	US	North America	NOA	2	FRA	FRA	DE	Europe	EUR	4	0	0	0	0	ACV-SFO-FRA-KBP	UA	LH	LH	12 23 	2015	1
+BGW	BGW	IQ	Asia	MDE	3	GZP	GZP	TR	Asia	EUR	3	IST	IST	TR	Asia	EUR	32				NULL		NULL	2	0	0	2	BGW-IST-GZP	TK	TK		1 2 3 4 5 7 	2015	1
+THD	THD	VN	Asia	SEA	3	TBB	TBB	VN	Asia	SEA	3	SGN	SGN	VN	Asia	SEA	43				NULL		NULL	16	0	0	16	THD-SGN-TBB	BL	BL		1 2 3 4 5 	2015	1
+VVI	SRZ	BO	South America	SOA	2	CPH	CPH	DK	Europe	EUR	4	MIA	MIA	US	North America	NOA	2	LHR	LON	GB	Europe	EUR	4	0	0	0	0	VVI-MIA-LHR-CPH	AA	AA	BA	91 32 23 44 8 4 5 	2015	1
+JMS	JMS	US	North America	NOA	2	ASE	ASE	US	North America	NOA	2	DEN	DEN	US	North America	NOA	2				NULL		NULL	0	0	0	0	JMS-DEN-ASE	UA	UA		91 32 23 44 8 4 5 	2015	1
+MLX	MLX	TR	Asia	EUR	3	OZH	OZH	UA	Europe	EUR	4	IST	IST	TR	Asia	EUR	3				NULL		NULL	2	0	0	2	MLX-IST-OZH	TK	TK		1 2 3 6 	2015	1
+ORH	ORH	US	North America	NOA	2	BQN	BQN	PR	North America	CAR	2	MCO	ORL	US	North America	NOA	2				NULL		NULL	0	0	0	0	ORH-MCO-BQN	B6	B6		91 32 23 44 8 4 5 	2015	1
+ORH	ORH	US	North America	NOA	2	BQN	BQN	PR	North America	CAR	2	FLL	FLL	US	North America	NOA	2				NULL		NULL	1	0	0	1	ORH-FLL-BQN	B6	B6		91 32 23 44 8 4 5 	2015	1s

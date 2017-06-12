@@ -5,4 +5,4 @@ module.exports = {
   aggregated: '../../sandboxdata/aggregations/mobility/amadeus/traffic/country/',
   temp: '../../sandboxdata/aggregations/mobility/amadeus/traffic/country/',
   fields: ['year', 'week', 'count', 'origin', 'destination']
-}
+};
