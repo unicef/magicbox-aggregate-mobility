@@ -6,15 +6,14 @@ var expect = require('chai').expect;
 var assert = require('chai').assert;
 var moment = require('moment');
 var summarizedDataDir = './test/data/summarized/';
-var tempDir = '../../sandboxdata/temp/';
+var tempDir = './test/temp/';
 var testFile = 'test.csv';
 var origin = 0;
 var destination = 1;
 var count = 2;
+var date_lookup = {'2015': '2015-01-05'};
 
 // Test for utility.js
-// Make sure you run spark_aggregate command before running this test
-// command -> spark-shell -i ./spark/aggregate.scala --conf spark.driver.extraJavaOptions="-Dtest.csv,./test/data/,../../sandboxdata/temp/"
 describe('testing utility', function() {
     // checking if any file is present in test/summarized/. If yes we need to delete it otherwise
     // we will get multiple similar entries.
@@ -26,9 +25,9 @@ describe('testing utility', function() {
         }
     });
 
-    it ('checking count', function(done) {
+    it ('checking combine_spark_output', function(done) {
         // calling combine_spark_output method on test data
-        util.combine_spark_output(testFile, tempDir, summarizedDataDir).then(data => {
+        util.combine_spark_output(testFile, tempDir, summarizedDataDir, date_lookup).then(data => {
             var fileList = fs.readdirSync(summarizedDataDir);
             var csvFiles = fileList.filter(file => {
                 return (path.extname(file) === '.csv')
