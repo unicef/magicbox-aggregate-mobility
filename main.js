@@ -14,6 +14,21 @@ const csv=require('csvtojson');
 var zipped_csv_files = fs.readdirSync(config.zipped).filter(f => {
   return f.match(/_W_/);
 });
+// Get list of previously aggregated files.
+var processed_files = fs.readdirSync(config.processed).filter(f => {
+  return f.match(/.csv/);
+});
+
+// Filter out files that have already been processed
+var zipped_csv_files_to_process = zipped_csv_files.filter(f => {
+  var year_month = f.match(/\d{4}_\d{2}/);
+  if (year_month) {
+    year_month = year_month[0].replace('_', '-');
+  } else {
+    return false;
+  }
+  return !processed_files.find(p => { return p.match(year_month)})
+})
 
 // Directory to unzip csvs to.
 var path_unzipped = config.unzipped;
@@ -41,7 +56,7 @@ async.waterfall([
     // Iterate through CSVs
     // aggregate it with spark
     // summarize output
-    bluebird.each(zipped_csv_files, file => {
+    bluebird.each(zipped_csv_files_to_process, file => {
       console.log('Processing', file);
       return process_file(file, date_lookup);
     }, {concurreny: 1})
