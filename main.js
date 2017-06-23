@@ -64,7 +64,7 @@ async.waterfall([
   }
 ], () => {
     console.log('Done with all!!!');
-    proces.exit();
+    process.exit();
   }, 1);
 
 /**
