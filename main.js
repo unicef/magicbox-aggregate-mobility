@@ -60,7 +60,7 @@ async.waterfall([
       console.log('Processing', file);
       return process_file(file, date_lookup);
     }, {concurreny: 1})
-    .then(resolve);
+    .then(callback);
   }
 ], () => {
     console.log('Done with all!!!');
