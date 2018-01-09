@@ -22,11 +22,17 @@ val airport_admins = sqlContext.read.format("com.databricks.spark.csv").option("
 airport_admins.registerTempTable("airport_admins")
 
 // SQL
-val statement = "select m.year, m.week, sum(m.traffic_estimation) as cnt, first_value(a1.id_1) as origin_admin_1, first_value(a2.id_1) as destination_admin_1 from mobils m inner join airport_admins a1 on a1.iata_code = m.origin_airport inner join airport_admins a2 on a2.iata_code = m.destination_airport group by a1.id_1, a2.id_1, year, week order by week"
+val statement = "select m.year, m.week, sum(m.traffic_estimation) as cnt, first_value(a1.id_1) as origin_admin_1, first_value(a2.id_1) as destination_admin_1, first_value(m.origin_airport) as origin_airport, first_value(m.destination_airport) as destination_airport from mobils m inner join airport_admins a1 on a1.iata_code = m.origin_airport inner join airport_admins a2 on a2.iata_code = m.destination_airport group by a1.id_1, a2.id_1, year, week order by week"
 println(statement)
 
 // Runs query
 val distOrigins = sqlContext.sql(statement)
+
+// Filter and display airports IATA codes that are not in the airport_admins.csv file
+val missing_origin_airports = distOrigins.filter("origin_admin_1 is null").select("origin_airport")
+val missing_destination_airports = distOrigins.filter("destination_admin_1 is null").select("destination_airport")
+
+missing_origin_airports.unionAll(missing_destination_airports).distinct().collect().foreach(println)
 
 // Outputs contents to specfied path
 distOrigins.write.format("com.databricks.spark.csv").save(path_temp + arg1)
