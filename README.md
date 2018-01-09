@@ -86,13 +86,23 @@ To this section specifically, we need to cover these things:
  -->
 
 
-### Running
+### Running with Docker
 
-```bash
-node main.js
+In this repository you can find a Dockerfile to build an image of this project.
+
+Build the image:
+
+```
+docker build -t unicef/aggregate_airport_mobility .
 ```
 
-### Running tests
+You can then run this project within docker using:
+
+```
+docker run --rm -v $(pwd):/app unicef/aggregate_airport_mobility node main.js
+```
+
+## Running tests
 
 ```bash
 npm run test
