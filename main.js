@@ -39,6 +39,9 @@ var path_temp = config.temp;
 // Path to direcotry where spark output is summarized
 var path_processed = config.processed;
 
+// Aggregation level at which the result will be generated
+var aggregation_level = config.aggregation_level;
+
 // Has method to combine spark output
 var util = require('./combine_spark_output');
 
@@ -106,7 +109,7 @@ function process_file(file, date_lookup) {
 
       // Aggregate file.
       function(unzipped_file, callback) {
-        aggregate.aggregate(unzipped_file, path_unzipped, path_temp)
+        aggregate.aggregate(unzipped_file, aggregation_level, path_unzipped, path_temp)
         .then(() => {
           callback(null, unzipped_file)
         })
