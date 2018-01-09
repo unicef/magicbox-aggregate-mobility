@@ -36,7 +36,7 @@ Hadoop
 wget http://ftp.unicamp.br/pub/apache/hadoop/common/hadoop-3.0.0/hadoop-3.0.0.tar.gz && tar -xzvf hadoop-3.0.0.tar.gz 
 ```
 
-Make sure to `JAVA_HOME` available on your environment and `hadoop-3.0.0/bin` on your PATH
+Make sure that `JAVA_HOME` is available on your environment and `hadoop-3.0.0/bin` on your PATH
 
 
 Spark
