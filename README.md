@@ -62,6 +62,20 @@ npm install
 node main.js
 ```
 
+### With Docker
+
+In this repository you can find a Dockerfile to build an image of this project.
+
+Build the image:
+```
+docker build -t unicef/aggregate_airport_mobility .
+```
+
+You can then run this project within docker using:
+```
+docker run --rm -v $(pwd):/app unicef/aggregate_airport_mobility node main.js
+```
+
 ## Running the tests
 
 ```
