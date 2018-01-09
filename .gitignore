@@ -1,5 +1,21 @@
 metastore_db
-data
+
+# Project data structure
+data/*
+!data/aggregated
+!data/processed
+!data/temp
+!data/unzipped
+!data/zipped
+
+data/aggregated/*
+data/processed/*
+data/temp/*
+data/unzipped/*
+data/zipped/*
+
+!data/zipped/unicef_traffic_W_2015_01.csv.gz
+
 ./zipfiles
 .DS_Store
 # Logs
@@ -44,3 +60,5 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
+!.gitignore
