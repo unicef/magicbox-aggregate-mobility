@@ -40,7 +40,7 @@ var path_temp = config.temp;
 var path_processed = config.processed;
 
 // Has method to combine spark output
-var util = require('./utility');
+var util = require('./combine_spark_output');
 
 
 async.waterfall([

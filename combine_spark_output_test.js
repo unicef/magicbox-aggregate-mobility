@@ -1,5 +1,5 @@
 var fs = require('fs');
-var util = require('./utility');
+var util = require('./combine_spark_output');
 var config = require('./config');
 var path = require('path');
 var expect = require('chai').expect;
