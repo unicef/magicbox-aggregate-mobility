@@ -47,6 +47,8 @@ COPY package*.json ./
 
 RUN npm install
 
+ADD config_sample.js config.js
+
 # Copy project files
 
 COPY . .
