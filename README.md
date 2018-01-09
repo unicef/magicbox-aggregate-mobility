@@ -68,6 +68,6 @@ node main.js
 npm run test
 ```
 
-##Contributing
+## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/unicef/aggregate_airport_mobility
