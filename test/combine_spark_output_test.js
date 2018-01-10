@@ -44,7 +44,7 @@ describe('combine_spark_output', function() {
         expect(count).to.equal(expectedData.get(origin + destination), `Count did not match for ${origin} - ${destination}`)
       })
       done()
-    }).catch((err) => done(err))
+    }).catch(done)
   })
 })
 
