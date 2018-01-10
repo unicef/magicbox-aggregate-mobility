@@ -1,20 +1,29 @@
 metastore_db
 
 # Project data structure
-data/*
-!data/aggregated
-!data/processed
-!data/temp
-!data/unzipped
-!data/zipped
+./data/*
+!./data/aggregated
+!./data/processed
+!./data/temp
+!./data/unzipped
+!./data/zipped
 
-data/aggregated/*
-data/processed/*
-data/temp/*
-data/unzipped/*
-data/zipped/*
+./data/aggregated/*
+./data/processed/*
+./data/temp/*
+./data/unzipped/*
+./data/zipped/*
 
-!data/zipped/unicef_traffic_W_2015_01.csv.gz
+!./data/zipped/unicef_traffic_W_2015_01.csv.gz
+
+./test/data/*
+!./test/data/processed
+!./test/data/temp
+!./test/data/unzipped
+
+./test/data/processed/*
+./test/data/temp/*
+./test/data/unzipped/*
 
 ./zipfiles
 .DS_Store
@@ -22,6 +31,9 @@ data/zipped/*
 logs
 *.log
 npm-debug.log*
+
+# Spark output
+spark.output
 
 # Runtime data
 pids
