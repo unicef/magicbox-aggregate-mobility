@@ -1,29 +1,29 @@
 metastore_db
 
 # Project data structure
-./data/*
-!./data/aggregated
-!./data/processed
-!./data/temp
-!./data/unzipped
-!./data/zipped
+data/*
+!data/aggregated
+!data/processed
+!data/temp
+!data/unzipped
+!data/zipped
 
-./data/aggregated/*
-./data/processed/*
-./data/temp/*
-./data/unzipped/*
-./data/zipped/*
+data/aggregated/*
+data/processed/*
+data/temp/*
+data/unzipped/*
+data/zipped/*
 
-!./data/zipped/unicef_traffic_W_2015_01.csv.gz
+!data/zipped/unicef_traffic_W_2015_01.csv.gz
 
-./test/data/*
-!./test/data/processed
-!./test/data/temp
-!./test/data/unzipped
+test/data/*
 
-./test/data/processed/*
-./test/data/temp/*
-./test/data/unzipped/*
+test/data/processed/*
+test/data/temp/*
+test/data/unzipped/*
+!test/data/processed/.gitignore
+!test/data/temp/.gitignore
+!test/data/unzipped/.gitignore
 
 ./zipfiles
 .DS_Store
