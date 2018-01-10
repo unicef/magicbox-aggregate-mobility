@@ -1,7 +1,7 @@
 Aggregate Airport Mobility
 ==========================
 
-Aggregate Amaedus mobility data by administrative boundary to produce CSV output
+Aggregate Amadeus mobility data by administrative boundary to produce CSV output
 
 
 ## What is this?
