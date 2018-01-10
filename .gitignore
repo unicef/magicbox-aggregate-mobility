@@ -18,12 +18,14 @@ data/zipped/*
 
 ./zipfiles
 .DS_Store
+
 # Logs
 logs
 *.log
 npm-debug.log*
 
 # Runtime data
+package-lock.json
 pids
 *.pid
 *.seed
