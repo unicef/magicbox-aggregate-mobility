@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha combine_spark_output_test.js"
+    "test": "mocha"
   },
   "author": "",
   "license": "ISC",
