@@ -1,6 +1,8 @@
 Aggregate Airport Mobility
 ==========================
 
+[![Build Status](https://travis-ci.org/unicef/aggregate_airport_mobility.svg?branch=master)](https://travis-ci.org/unicef/aggregate_airport_mobility)
+
 Aggregate Amadeus mobility data by administrative boundary to produce CSV output
 
 
