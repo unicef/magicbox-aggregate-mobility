@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "pretest": "if [ ! -f ./config.js ]; then cp config_sample.js config.js; fi",
-    "test": "mocha --no-timeouts"
+    "test": "mocha --no-timeouts",
+    "lint": "eslint ./"
   },
   "author": "",
   "license": "ISC",
