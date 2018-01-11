@@ -1,6 +1,7 @@
 Aggregate Airport Mobility
 ==========================
 
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Build Status](https://travis-ci.org/unicef/aggregate_airport_mobility.svg?branch=master)](https://travis-ci.org/unicef/aggregate_airport_mobility)
 
 Aggregate Amadeus mobility data by administrative boundary to produce CSV output
@@ -113,9 +114,12 @@ npm run test
 
 ## Contributing
 
-Coming soon!
+Check out the following:
 
-<!-- Contributing guidelines will exist in .github/CONTRIBUTING.md. -->
+1. [MagicBox contributing
+   guidelines](https://github.com/unicef/magicbox/wiki/Contributing-guidelines)
+2. [aggregate_airport_mobility
+   checklist](https://github.com/unicef/aggregate_airport_mobility/blob/master/.github/CONTRIBUTING.md)
 
 
 ## Legal
