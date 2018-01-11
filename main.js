@@ -66,7 +66,7 @@ async.waterfall([
     .then(callback);
   }
 ], () => {
-    console.log('Done with all!!!');
+    console.log('Done with all!');
     process.exit();
   }, 1);
 
@@ -81,7 +81,7 @@ function process_file(file, date_lookup) {
       // Delete everything in temp directory
       function(callback) {
         console.log('delete path_temp:', path_temp);
-        var command = 'rm ' + path_temp + '*';
+        var command = 'rm -rd ' + path_temp + ' && mkdir ' + path_temp;
         exec(command, (err, stdout, stderr) => {
           if (err) {
             console.error(err);
@@ -171,7 +171,7 @@ function clean_directories() {
         });
       }
     ], () => {
-        console.log("Done cleaning!!!");
+        console.log("Done cleaning.");
         resolve();
       }, 1);
   })
