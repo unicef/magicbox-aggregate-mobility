@@ -2,49 +2,50 @@
 // Amadeus provides a csv per month that has travel by week
 
 // Has method to aggregate csv with spark.
-var aggregate = require('./aggregate/spark_aggregate');
-var async = require('async');
-var fs = require('fs');
-var bluebird = require('bluebird');
-var exec = require('child_process').exec;
-var config = require('./config');
-const csv=require('csvtojson');
+const aggregate = require('./aggregate/spark_aggregate');
+const async = require('async');
+const fs = require('fs');
+const bluebird = require('bluebird');
+const exec = require('child_process').exec;
+const config = require('./config');
+const csv = require('csvtojson');
+const util = require('./combine_spark_output');
+
+// Directory to unzip csvs to.
+let path_unzipped = config.unzipped;
+
+// Path to spark output directory
+let path_temp = config.temp;
+
+// Path to direcotry where spark output is summarized
+let path_processed = config.processed;
+
+// Aggregation level at which the result will be generated
+let aggregation_level = config.aggregation_level;
 
 // Get list of all zipped csv files.
-var zipped_csv_files = fs.readdirSync(config.zipped).filter(f => {
+let zipped_csv_files = fs.readdirSync(config.zipped).filter(f => {
   return f.match(/_W_/);
 });
+
 // Get list of previously aggregated files.
-var processed_files = fs.readdirSync(config.processed).filter(f => {
+let processed_files = fs.readdirSync(config.processed).filter(f => {
   return f.match(/.csv/);
 });
 
 // Filter out files that have already been processed
-var zipped_csv_files_to_process = zipped_csv_files.filter(f => {
-  var year_month = f.match(/\d{4}_\d{2}/);
+let zipped_csv_files_to_process = zipped_csv_files.filter(f => {
+  let year_month = f.match(/\d{4}_\d{2}/);
   if (year_month) {
     year_month = year_month[0].replace('_', '-');
   } else {
     return false;
   }
-  return !processed_files.find(p => { return p.match(year_month)})
+
+  return !processed_files.find(p => {
+    return p.match(year_month)
+  })
 })
-
-// Directory to unzip csvs to.
-var path_unzipped = config.unzipped;
-
-// Path to spark output directory
-var path_temp = config.temp;
-
-// Path to direcotry where spark output is summarized
-var path_processed = config.processed;
-
-// Aggregation level at which the result will be generated
-var aggregation_level = config.aggregation_level;
-
-// Has method to combine spark output
-var util = require('./combine_spark_output');
-
 
 async.waterfall([
   // Delete everything in temp directory
@@ -73,6 +74,7 @@ async.waterfall([
 /**
  * Iterate through CSVs, aggregate it with spark, summarize output
  * @param{String} file - name of CSV
+ * @param{Object} date_lookup - object that maps a year to a specific date 'YYYY-MM-DD'
  * @return{Promise} Fulfilled when records are returned
  */
 function process_file(file, date_lookup) {
@@ -81,7 +83,7 @@ function process_file(file, date_lookup) {
       // Delete everything in temp directory
       function(callback) {
         console.log('delete path_temp:', path_temp);
-        var command = 'rm -rd ' + path_temp + ' && mkdir ' + path_temp;
+        let command = 'rm -rd ' + path_temp + ' && mkdir ' + path_temp;
         exec(command, (err, stdout, stderr) => {
           if (err) {
             console.error(err);
@@ -97,8 +99,9 @@ function process_file(file, date_lookup) {
 
       // Unzip file to process
       function(callback) {
-        var unzipped_file = file.replace(/.gz$/, '');
-        var command = 'gunzip -c ' + config.zipped + file + ' > ' + path_unzipped + unzipped_file;
+        let unzipped_file = file.replace(/.gz$/, '');
+        let command = 'gunzip -c ' + config.zipped + file +
+          ' > ' + path_unzipped + unzipped_file;
         exec(command, (err, stdout, stderr) => {
           if (err) {
             console.error(err);
@@ -109,8 +112,12 @@ function process_file(file, date_lookup) {
 
       // Aggregate file.
       function(unzipped_file, callback) {
-        aggregate.aggregate(unzipped_file, aggregation_level, path_unzipped, path_temp)
-        .then(() => {
+        aggregate.aggregate(
+          unzipped_file,
+          aggregation_level,
+          path_unzipped,
+          path_temp
+        ).then(() => {
           callback(null, unzipped_file)
         })
       },
@@ -135,23 +142,26 @@ function process_file(file, date_lookup) {
           console.log('Done combining');
           callback(null, unzipped_file);
         });
-      },
-
+      }
     ], () => {
-        console.log("Done aggregating!!!");
+        console.log('Done aggregating!!!');
         clean_directories()
         .then(resolve);
       }, 1);
   })
 }
 
+/**
+ * Clean contents inside directories path_temp and path_unzipped
+ * @return{Promise} Fulfilled when directories are cleaned
+ */
 function clean_directories() {
   return new Promise((resolve, reject) => {
     async.waterfall([
       // Delete everything in temp directory
       function(callback) {
         console.log('delete path_temp:', path_temp);
-        var command = 'rm -rf ' + path_temp + '*';
+        let command = 'rm -rf ' + path_temp + '*';
         exec(command, (err, stdout, stderr) => {
           if (err) {
             console.error(err);
@@ -162,7 +172,7 @@ function clean_directories() {
 
       // Delete everything in unzipped directory
       function(callback) {
-        var command = 'rm ' + path_unzipped + '*';
+        let command = 'rm ' + path_unzipped + '*';
         exec(command, (err, stdout, stderr) => {
           if (err) {
             console.error(err);
@@ -171,7 +181,7 @@ function clean_directories() {
         });
       }
     ], () => {
-        console.log("Done cleaning.");
+        console.log('Done cleaning.');
         resolve();
       }, 1);
   })
@@ -184,7 +194,7 @@ function clean_directories() {
  */
 function get_date_lookup() {
   seen = {};
-  var date_lookup = {};
+  let date_lookup = {};
   return new Promise((resolve, reject) => {
     const csvFilePath='./traffic_weeks_definitions.csv';
     csv({delimiter: ';'})
@@ -195,7 +205,7 @@ function get_date_lookup() {
       }
       seen[jsonObj.nYear] = 1;
     })
-    .on('done',(error)=>{
+    .on('done', (error) => {
       console.log('end read traffic_weeks_definitions')
       return resolve(date_lookup);
     })

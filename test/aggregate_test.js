@@ -9,7 +9,7 @@ require('../combine_spark_output').combine_spark_output
 const mock = require('mock-require')
 const fs = require('fs')
 const path = require('path');
-const expect = require('chai').expect;
+const chai = require('chai');
 
 // Test for aggregate.js
 describe('aggregate', function() {
@@ -51,7 +51,7 @@ describe('aggregate', function() {
         return
       }
 
-      expect(count).to.equal(expected[origin + ',' + destination], `Count did not match for ${origin} - ${destination}`)
+      chai.expect(count).to.equal(expected[origin + ',' + destination], `Count did not match for ${origin} - ${destination}`)
     })
   }
 
