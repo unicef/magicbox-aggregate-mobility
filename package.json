@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "pretest": "if [ ! -f ./config.js ]; then cp config_sample.js config.js; fi",
     "test": "mocha"
   },
   "author": "",

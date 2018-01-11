@@ -5,12 +5,12 @@ WORKDIR /app
 # Install project dependencies
 
 # Install Java
-RUN apt-get update -y && apt-get install -y wget curl gzip tar default-jdk
+RUN apt-get update -y \
+    && apt-get install -y wget curl gzip tar default-jdk
 
 # Install Hadoop
 RUN cd /tmp \
-    && wget http://ftp.unicamp.br/pub/apache/hadoop/common/hadoop-3.0.0/hadoop-3.0.0.tar.gz \
-    && tar -xzvf hadoop-3.0.0.tar.gz \
+    && curl -Lo - http://ftp.unicamp.br/pub/apache/hadoop/common/hadoop-3.0.0/hadoop-3.0.0.tar.gz | tar -xz \
     && mv hadoop-3.0.0 /usr/local/hadoop 
 
 ENV JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64/jre/"
@@ -19,8 +19,7 @@ ENV PATH="$PATH:/usr/local/hadoop/bin/"
 
 # Install Spark
 RUN cd /tmp \
-    && wget http://ftp.unicamp.br/pub/apache/spark/spark-2.2.1/spark-2.2.1-bin-hadoop2.7.tgz \
-    && tar -xzvf spark-2.2.1-bin-hadoop2.7.tgz \
+    && curl -Lo - http://ftp.unicamp.br/pub/apache/spark/spark-2.2.1/spark-2.2.1-bin-hadoop2.7.tgz | tar -xz \
     && mv spark-2.2.1-bin-hadoop2.7 /usr/local/spark
 
 ENV PATH="$PATH:/usr/local/spark/bin/"
@@ -30,7 +29,7 @@ ENV NVM_DIR="/usr/local/nvm"
 ENV NODE_VERSION="7.10.1"
 
 # Install NVM and Nodejs
-RUN curl --silent -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
+RUN curl -so - https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
 
 # install node and npm
 RUN \. $NVM_DIR/nvm.sh \
