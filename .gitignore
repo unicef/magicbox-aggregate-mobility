@@ -27,6 +27,7 @@ test/data/unzipped/*
 
 ./zipfiles
 .DS_Store
+
 # Logs
 logs
 *.log
@@ -36,6 +37,7 @@ npm-debug.log*
 spark.output
 
 # Runtime data
+package-lock.json
 pids
 *.pid
 *.seed
