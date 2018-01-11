@@ -52,7 +52,7 @@ Run these commands at a command prompt.
 ```bash
 git clone https://github.com/unicef/aggregate_airport_mobility.git
 cd aggregate_airport_mobility
-cp config-sample.js config.js
+cp config_sample.js config.js
 npm install
 ```
 
