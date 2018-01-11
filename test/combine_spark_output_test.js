@@ -4,7 +4,7 @@ const path = require('path')
 const chai = require('chai')
 
 // Test for combine_spark_output.js
-describe('combine_spark_output', function() {
+describe('combine_spark_output', () => {
   let sparkOutputDir = 'spark_output_sample'
   let tempDir = './test/data/'
   let processedDataDir = './test/data/processed/'
@@ -12,7 +12,7 @@ describe('combine_spark_output', function() {
 
   // checking if any file is present in ./test/data/processed. If yes we need to delete it otherwise
   // we will get multiple similar entries.
-  before(function() {
+  before(() => {
     if (fs.existsSync(processedDataDir)) {
       fs.readdirSync(processedDataDir)
         .forEach(file => {
@@ -21,7 +21,7 @@ describe('combine_spark_output', function() {
     }
   })
 
-  it('should combine all spark output files into one', function(done) {
+  it('should combine all spark output files into one', (done) => {
     // calling combine_spark_output method on test data
     util.combine_spark_output(
       sparkOutputDir,
@@ -64,7 +64,7 @@ describe('combine_spark_output', function() {
  * value is the count of travellers.
  * @return {Map} expectedData holds expected result of the test
  */
-function getExpectedData() {
+const getExpectedData = () => {
   let expectedData = new Map()
   expectedData.set('IQTR', '2')
   expectedData.set('VNVN', '16')

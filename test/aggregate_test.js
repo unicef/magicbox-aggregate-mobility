@@ -12,7 +12,7 @@ const path = require('path');
 const chai = require('chai');
 
 // Test for aggregate.js
-describe('aggregate', function() {
+describe('aggregate', () => {
   // Custom configuration provided for the test
   let config = {
     zipped: './test/data/zipped/',

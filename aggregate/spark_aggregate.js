@@ -5,7 +5,7 @@ const spark_path = require('../config').spark_path;
 // executes `pwd`
 exports.aggregate = (file, aggregation_level, path_unzipped, path_temp) => {
   console.log('SPARK CLI!', file);
-  return new Promise(function(resolve, reject) {
+  return new Promise((resolve, reject) => {
     let command = spark_path +
     'spark-shell -i ./spark/aggregate.scala --conf ' +
     'spark.driver.extraJavaOptions="-D' +

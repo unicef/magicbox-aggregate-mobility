@@ -52,13 +52,13 @@ exports.combine_spark_output = (
  * @param{Object} date_lookup - object that maps a year to a specific date 'YYYY-MM-DD'
  * @return{Promise} Fulfilled when records are returned
  */
-function process_file(
+const process_file = (
   f,
   file_named_dir,
   path_temp,
   path_summarized,
   date_lookup
-) {
+) => {
   return new Promise((resolve, reject) => {
     let records = {};
     let data = fs.readFileSync(path_temp + file_named_dir + '/' + f, 'utf8');
@@ -99,7 +99,7 @@ function process_file(
  * @param{Array} week_ary - array of records per that week
  * @return{Promise} Fulfilled when records are returned
  */
-function create_or_append(path, week_ary) {
+const create_or_append = (path, week_ary) => {
   console.log(path, '!!!!')
   let csv = week_ary.reduce((s, d) => {
     s += [d.origin, d.destination, d.count] + '\n';

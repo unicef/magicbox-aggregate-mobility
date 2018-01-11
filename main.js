@@ -49,14 +49,14 @@ let zipped_csv_files_to_process = zipped_csv_files.filter(f => {
 
 async.waterfall([
   // Delete everything in temp directory
-  function(callback) {
+  (callback) => {
     get_date_lookup()
     .then(date_lookup => {
       callback(null, date_lookup);
     })
   },
 
-  function(date_lookup, callback) {
+  (date_lookup, callback) => {
     // Iterate through CSVs
     // aggregate it with spark
     // summarize output
@@ -77,11 +77,11 @@ async.waterfall([
  * @param{Object} date_lookup - object that maps a year to a specific date 'YYYY-MM-DD'
  * @return{Promise} Fulfilled when records are returned
  */
-function process_file(file, date_lookup) {
+const process_file = (file, date_lookup) => {
   return new Promise((resolve, reject) => {
     async.waterfall([
       // Delete everything in temp directory
-      function(callback) {
+      (callback) => {
         console.log('delete path_temp:', path_temp);
         let command = 'rm -rd ' + path_temp + ' && mkdir ' + path_temp;
         exec(command, (err, stdout, stderr) => {
@@ -92,13 +92,13 @@ function process_file(file, date_lookup) {
         });
       },
 
-      function(callback) {
+      (callback) => {
         clean_directories()
         .then(callback);
       },
 
       // Unzip file to process
-      function(callback) {
+      (callback) => {
         let unzipped_file = file.replace(/.gz$/, '');
         let command = 'gunzip -c ' + config.zipped + file +
           ' > ' + path_unzipped + unzipped_file;
@@ -111,7 +111,7 @@ function process_file(file, date_lookup) {
       },
 
       // Aggregate file.
-      function(unzipped_file, callback) {
+      (unzipped_file, callback) => {
         aggregate.aggregate(
           unzipped_file,
           aggregation_level,
@@ -123,7 +123,7 @@ function process_file(file, date_lookup) {
       },
 
       // Combine all the output
-      function(unzipped_file, callback) {
+      (unzipped_file, callback) => {
         console.log('Start combining');
         console.log(file.replace(/.gz$/, ''),
         path_temp,
@@ -135,10 +135,10 @@ function process_file(file, date_lookup) {
           path_processed,
           date_lookup
         )
-        .catch(function(err) {
+        .catch((err) => {
           console.log(err);
         })
-        .then(function() {
+        .then(() => {
           console.log('Done combining');
           callback(null, unzipped_file);
         });
@@ -155,11 +155,11 @@ function process_file(file, date_lookup) {
  * Clean contents inside directories path_temp and path_unzipped
  * @return{Promise} Fulfilled when directories are cleaned
  */
-function clean_directories() {
+const clean_directories = () => {
   return new Promise((resolve, reject) => {
     async.waterfall([
       // Delete everything in temp directory
-      function(callback) {
+      (callback) => {
         console.log('delete path_temp:', path_temp);
         let command = 'rm -rf ' + path_temp + '*';
         exec(command, (err, stdout, stderr) => {
@@ -171,7 +171,7 @@ function clean_directories() {
       },
 
       // Delete everything in unzipped directory
-      function(callback) {
+      (callback) => {
         let command = 'rm ' + path_unzipped + '*';
         exec(command, (err, stdout, stderr) => {
           if (err) {
@@ -192,7 +192,7 @@ function clean_directories() {
  * Create lookup of first week to an exact date based on traffic_weeks_definitions.csv
  * @return{Promise} Fulfilled when date_lookup object is fully formed
  */
-function get_date_lookup() {
+const get_date_lookup = () => {
   seen = {};
   let date_lookup = {};
   return new Promise((resolve, reject) => {
