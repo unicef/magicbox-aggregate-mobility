@@ -6,7 +6,8 @@
   "scripts": {
     "pretest": "if [ ! -f ./config.js ]; then cp config_sample.js config.js; fi",
     "test": "mocha --no-timeouts",
-    "lint": "eslint ./"
+    "lint": "eslint ./",
+    "precommit": "npm run lint"
   },
   "author": "",
   "license": "ISC",
@@ -21,6 +22,7 @@
     "chai": "^4.0.2",
     "eslint": "^3.19.0",
     "eslint-config-google": "^0.7.1",
+    "husky": "^0.14.3",
     "mocha": "^3.4.2",
     "mock-require": "^2.0.2"
   }
