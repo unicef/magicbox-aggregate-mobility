@@ -1,18 +1,20 @@
-var util = require('util');
-var exec = require('child_process').exec;
-var aggregate = require('../aggregate/spark_aggregate');
-var child;
-var spark_path = require('../config').spark_path;
+const util = require('util');
+const exec = require('child_process').exec;
+const spark_path = require('../config').spark_path;
 
 // executes `pwd`
-exports.aggregate = function(file, aggregation_level, path_unzipped, path_temp) {
-
+exports.aggregate = (file, aggregation_level, path_unzipped, path_temp) => {
   console.log('SPARK CLI!', file);
   return new Promise(function(resolve, reject) {
-    var command = spark_path + 'spark-shell -i ./spark/aggregate.scala --conf spark.driver.extraJavaOptions="-D' + file + ',' + aggregation_level +  ',' + path_unzipped + ',' + path_temp +  '" &>> spark.output'
+    let command = spark_path +
+    'spark-shell -i ./spark/aggregate.scala --conf ' +
+    'spark.driver.extraJavaOptions="-D' +
+    file + ',' + aggregation_level +
+    ',' + path_unzipped + ',' + path_temp +
+    '" >> spark.output'
 
-    child = exec(
-      command, function (error, stdout, stderr) {
+    exec(
+      command, (error, stdout, stderr) => {
         util.print('stdout: ' + stdout);
         util.print('stderr: ' + stderr);
         if (error !== null) {
