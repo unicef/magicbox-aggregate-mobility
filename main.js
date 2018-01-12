@@ -5,17 +5,19 @@
 const aggregate = require('./aggregate/spark_aggregate');
 const async = require('async');
 const fs = require('fs');
+const path = require('path')
+const tmp = require('tmp')
+const zlib = require('zlib')
 const bluebird = require('bluebird');
-const exec = require('child_process').exec;
 const config = require('./config');
 const csv = require('csvtojson');
 const util = require('./combine_spark_output');
 
 // Directory to unzip csvs to.
-let path_unzipped = config.unzipped;
+let path_unzipped = tmp.dirSync({prefix: 'unzipped-', unsafeCleanup: true}).name
 
 // Path to spark output directory
-let path_temp = config.temp;
+let path_temp = tmp.dirSync({prefix: 'spark_output-', unsafeCleanup: true}).name
 
 // Path to direcotry where spark output is summarized
 let path_processed = config.processed;
@@ -105,23 +107,6 @@ async.waterfall([
 const process_file = (file, date_lookup) => {
   return new Promise((resolve, reject) => {
     async.waterfall([
-      // Delete everything in temp directory
-      (callback) => {
-        console.log('delete path_temp:', path_temp);
-        let command = 'rm -rd ' + path_temp + ' && mkdir ' + path_temp;
-        exec(command, (err, stdout, stderr) => {
-          if (err) {
-            console.error(err);
-          }
-          callback(null)
-        });
-      },
-
-      (callback) => {
-        clean_directories()
-        .then(callback);
-      },
-
       // Unzip file to process
       (callback) => {
         let unzipped_file = file.replace(/.gz$/, '');
@@ -170,43 +155,6 @@ const process_file = (file, date_lookup) => {
       }
     ], () => {
         console.log('Done aggregating!!!');
-        clean_directories()
-        .then(resolve);
-      }, 1);
-  })
-}
-
-/**
- * Clean contents inside directories path_temp and path_unzipped
- * @return{Promise} Fulfilled when directories are cleaned
- */
-const clean_directories = () => {
-  return new Promise((resolve, reject) => {
-    async.waterfall([
-      // Delete everything in temp directory
-      (callback) => {
-        console.log('delete path_temp:', path_temp);
-        let command = 'rm -rf ' + path_temp + '*';
-        exec(command, (err, stdout, stderr) => {
-          if (err) {
-            console.error(err);
-          }
-          callback(null)
-        });
-      },
-
-      // Delete everything in unzipped directory
-      (callback) => {
-        let command = 'rm ' + path_unzipped + '*';
-        exec(command, (err, stdout, stderr) => {
-          if (err) {
-            console.error(err);
-          }
-          callback(null)
-        });
-      }
-    ], () => {
-        console.log('Done cleaning.');
         resolve();
       }, 1);
   })
