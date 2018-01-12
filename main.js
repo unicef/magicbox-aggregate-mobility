@@ -47,6 +47,31 @@ let zipped_csv_files_to_process = zipped_csv_files.filter(f => {
   })
 })
 
+/**
+ * Amadeus weeks do not necessarily begin on the first of the year
+ * Create lookup of first week to an exact date based on traffic_weeks_definitions.csv
+ * @return{Promise} Fulfilled when date_lookup object is fully formed
+ */
+const get_date_lookup = () => {
+  seen = {};
+  let date_lookup = {};
+  return new Promise((resolve, reject) => {
+    const csvFilePath='./traffic_weeks_definitions.csv';
+    csv({delimiter: ';'})
+    .fromFile(csvFilePath)
+    .on('json', (jsonObj) => {
+      if (!seen[jsonObj.nYear]) {
+        date_lookup[parseInt(jsonObj.nYear)] = jsonObj.datStart;
+      }
+      seen[jsonObj.nYear] = 1;
+    })
+    .on('done', (error) => {
+      console.log('end read traffic_weeks_definitions')
+      return resolve(date_lookup);
+    })
+  })
+}
+
 async.waterfall([
   // Delete everything in temp directory
   (callback) => {
@@ -187,27 +212,3 @@ const clean_directories = () => {
   })
 }
 
-/**
- * Amadeus weeks do not necessarily begin on the first of the year
- * Create lookup of first week to an exact date based on traffic_weeks_definitions.csv
- * @return{Promise} Fulfilled when date_lookup object is fully formed
- */
-const get_date_lookup = () => {
-  seen = {};
-  let date_lookup = {};
-  return new Promise((resolve, reject) => {
-    const csvFilePath='./traffic_weeks_definitions.csv';
-    csv({delimiter: ';'})
-    .fromFile(csvFilePath)
-    .on('json', (jsonObj) => {
-      if (!seen[jsonObj.nYear]) {
-        date_lookup[parseInt(jsonObj.nYear)] = jsonObj.datStart;
-      }
-      seen[jsonObj.nYear] = 1;
-    })
-    .on('done', (error) => {
-      console.log('end read traffic_weeks_definitions')
-      return resolve(date_lookup);
-    })
-  })
-}
