@@ -109,15 +109,18 @@ const process_file = (file, date_lookup) => {
     async.waterfall([
       // Unzip file to process
       (callback) => {
-        let unzipped_file = file.replace(/.gz$/, '');
-        let command = 'gunzip -c ' + config.zipped + file +
-          ' > ' + path_unzipped + unzipped_file;
-        exec(command, (err, stdout, stderr) => {
-          if (err) {
-            console.error(err);
-          }
-          callback(null, unzipped_file)
-        });
+        let unzipped_file = file.replace(/.gz$/, '')
+        let zippedFileStream = fs.createReadStream(path.join(
+          config.zipped,
+          file
+        ))
+        let unzippedFileStream = fs.createWriteStream(path.join(
+          path_unzipped,
+          unzipped_file
+        ))
+
+        zippedFileStream.pipe(zlib.createGunzip()).pipe(unzippedFileStream)
+        callback(null, unzipped_file)
       },
 
       // Aggregate file.
@@ -136,9 +139,9 @@ const process_file = (file, date_lookup) => {
       (unzipped_file, callback) => {
         console.log('Start combining');
         console.log(file.replace(/.gz$/, ''),
-        path_temp,
-        path_processed
-      )
+          path_temp,
+          path_processed
+        )
         util.combine_spark_output(
           file.replace(/.gz$/, ''),
           path_temp,
