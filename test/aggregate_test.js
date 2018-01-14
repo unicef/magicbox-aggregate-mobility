@@ -8,8 +8,8 @@ const combine_spark_output =
 require('../combine_spark_output').combine_spark_output
 const mock = require('mock-require')
 const fs = require('fs')
-const path = require('path');
-const chai = require('chai');
+const path = require('path')
+const chai = require('chai')
 const tmp = require('tmp')
 
 // Test for aggregate.js

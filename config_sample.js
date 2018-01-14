@@ -4,4 +4,4 @@ module.exports = {
   spark_path: '',
   aggregation_level: 'admin0',
   fields: ['year', 'week', 'count', 'origin', 'destination']
-};
+}
