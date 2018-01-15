@@ -8,17 +8,25 @@ const combine_spark_output =
 require('../combine_spark_output').combine_spark_output
 const mock = require('mock-require')
 const fs = require('fs')
-const path = require('path');
-const chai = require('chai');
+const path = require('path')
+const chai = require('chai')
+const tmp = require('tmp')
 
 // Test for aggregate.js
-describe('aggregate', function() {
+describe('aggregate', () => {
+  // where the unzipped sample file is
+  let path_unzipped = './test/data/unzipped/'
+
+  // Path to spark output directory
+  let path_temp = tmp.dirSync({
+    prefix: 'spark_output-',
+    keep: true
+  }).name + '/'
+
   // Custom configuration provided for the test
   let config = {
     zipped: './test/data/zipped/',
-    unzipped: './test/data/unzipped/',
     processed: './test/data/processed/',
-    temp: './test/data/temp/',
     spark_path: '',
     aggregation_level: 'admin0',
     fields: ['year', 'week', 'count', 'origin', 'destination']
@@ -74,8 +82,9 @@ describe('aggregate', function() {
   // Clean stuff before each test
   beforeEach(() => {
     let processedFilePath = config.processed + outputFilename
-    cleanupDirectory(config.temp)
-    if (fs.existsSync(processedFilePath)) {
+    cleanupDirectory(path_temp)
+    if (fs.existsSync(processedFilePath) &&
+      !processedFilePath.includes('.gitignore')) {
       fs.unlinkSync(processedFilePath)
     }
   })
@@ -83,10 +92,10 @@ describe('aggregate', function() {
   // Tests
   it('should output aggregation by admin 0', (done) => {
     aggregate(
-      inputFilename, 'admin0', config.unzipped, config.temp
+      inputFilename, 'admin0', path_unzipped, path_temp
     ).then(() => {
       return combine_spark_output(
-        inputFilename, config.temp, config.processed, dateLookup
+        inputFilename, path_temp, config.processed, dateLookup
       ).then(() => {
         let expectedData = {
           'IQ,TR': '2',
@@ -108,10 +117,10 @@ describe('aggregate', function() {
 
   it('should output aggregation by admin 1 using join select', (done) => {
     aggregate(
-      inputFilename, 'admin1', config.unzipped, config.temp
+      inputFilename, 'admin1', path_unzipped, path_temp
     ).then(() => {
       return combine_spark_output(
-        inputFilename, config.temp, config.processed, dateLookup
+        inputFilename, path_temp, config.processed, dateLookup
       ).then(() => {
         let expectedData = {
           'mex_145_28_gadm2-8,esp_215_13_gadm2-8': '0',
@@ -134,10 +143,10 @@ describe('aggregate', function() {
 
   it('Should output aggregation of airport without admins', (done) => {
     aggregate(
-      inputFilename, 'admin3', config.unzipped, config.temp
+      inputFilename, 'admin3', path_unzipped, path_temp
     ).then(() => {
       return combine_spark_output(
-        inputFilename, config.temp, config.processed, dateLookup
+        inputFilename, path_temp, config.processed, dateLookup
       ).then(() => {
         let expectedData = {
           ',esp_215_13_44_328_gadm2-8': '0',
