@@ -2,6 +2,7 @@ Aggregate Airport Mobility
 ==========================
 
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
+[![Chat on Gitter](https://badges.gitter.im/unicef-innovation-dev/Lobby.png)](https://gitter.im/unicef-innovation-dev/Lobby)
 [![Build Status](https://travis-ci.org/unicef/aggregate_airport_mobility.svg?branch=master)](https://travis-ci.org/unicef/aggregate_airport_mobility)
 
 Aggregate Amadeus mobility data by administrative boundary to produce CSV output
