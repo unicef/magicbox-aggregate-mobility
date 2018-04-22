@@ -10,7 +10,7 @@ RUN apt-get update -y \
 
 # Install Hadoop
 RUN cd /tmp \
-    && curl -Lo - http://ftp.unicamp.br/pub/apache/hadoop/common/hadoop-3.0.0/hadoop-3.0.0.tar.gz | tar -xz \
+    && curl -Lo - https://archive.apache.org/dist/hadoop/core/hadoop-3.0.0/hadoop-3.0.0.tar.gz | tar -xz \
     && mv hadoop-3.0.0 /usr/local/hadoop 
 
 ENV JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64/jre/"
