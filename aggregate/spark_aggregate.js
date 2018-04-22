@@ -13,15 +13,20 @@ exports.aggregate = (file, aggregation_level, path_unzipped, path_temp) => {
     ',' + path_unzipped + ',' + path_temp +
     '" >> spark.output'
 
-    exec(
-      command, (error, stdout, stderr) => {
-        util.print('stdout: ' + stdout)
-        util.print('stderr: ' + stderr)
-        if (error !== null) {
+      try {
+          exec(
+              command, (error, stdout, stderr) => {
+                  util.print('stdout: ' + stdout)
+                  util.print('stderr: ' + stderr)
+                  if (error !== null) {
+                      throw error
+                  }
+                  console.log('DONE!')
+                  resolve()
+              })
+      } catch (error) {
           console.log('exec error: ' + error)
-        }
-        console.log('DONE!')
-        resolve()
-      })
+          reject()
+      }
   })
 }
