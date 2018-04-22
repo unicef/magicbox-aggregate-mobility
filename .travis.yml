@@ -14,4 +14,8 @@ before_install:
   - docker run -d -v $(pwd)/data:/app/data:z unicef/aggregate_airport_mobility /bin/bash -c "node main.js"
   - docker ps -a
   - docker run -v $(pwd)/data:/app/data:z unicef/aggregate_airport_mobility /bin/bash -c "node main.js"
-
+  - cd ..
+  - curl -Lo - https://archive.apache.org/dist/hadoop/core/hadoop-3.0.0/hadoop-3.0.0.tar.gz | tar -xz
+  - curl -Lo - http://ftp.unicamp.br/pub/apache/spark/spark-2.2.1/spark-2.2.1-bin-hadoop2.7.tgz | tar -xz
+  - export PATH=$PATH:$PWD/hadoop-3.0.0/bin:$PWD/spark-2.2.1-bin-hadoop2.7/bin
+  - cd magicbox-aggregate-mobility

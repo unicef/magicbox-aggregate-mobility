@@ -24,6 +24,7 @@
     "eslint": "^3.19.0",
     "eslint-config-google": "^0.7.1",
     "husky": "^0.14.3",
+    "mkdirp": "^0.5.1",
     "mocha": "^3.4.2",
     "mock-require": "^2.0.2"
   }
