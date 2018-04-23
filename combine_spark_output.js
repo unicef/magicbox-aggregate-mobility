@@ -101,13 +101,8 @@ const process_file = (
  */
 const make_directory_for_file = (output_file_path) => {
   const directory_name = path.dirname(output_file_path)
-  let create_directory_error = null
-  mkdirp(directory_name, (error) => {
-    create_directory_error = error
-  })
-  if (create_directory_error) {
-    throw create_directory_error
-  } else {
+  const create_directory_result = mkdirp.sync(directory_name)
+  if (create_directory_result) {
     console.log('created directory', directory_name, 'for', output_file_path)
   }
 }
