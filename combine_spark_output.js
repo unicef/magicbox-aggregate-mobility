@@ -3,7 +3,8 @@ const fs = require('fs')
 const bluebird = require('bluebird')
 const fields = config.fields
 const moment = require('moment')
-
+const mkdirp = require('mkdirp')
+const path = require('path')
 
 /**
  * Combines spark output to files by week date
@@ -95,24 +96,25 @@ const process_file = (
 
 /**
  * Create or append travel by file titled with date of week
- * @param{String} path - path to directory where records summarized by week are stored.
+ * @param{String} outputFilePath - path to directory where records summarized by week are stored.
  * @param{Array} week_ary - array of records per that week
  * @return{Promise} Fulfilled when records are returned
  */
-const create_or_append = (path, week_ary) => {
-  console.log(path, '!!!!')
+const create_or_append = (outputFilePath, week_ary) => {
+  console.log(outputFilePath, '!!!!')
   let csv = week_ary.reduce((s, d) => {
     s += [d.origin, d.destination, d.count] + '\n'
     return s
   }, '')
 
   return new Promise((resolve, reject) => {
-    fs.exists(path, exists => {
+    fs.exists(outputFilePath, exists => {
       if (exists) {
-        fs.appendFileSync(path, csv + '\n')
+        fs.appendFileSync(outputFilePath, csv + '\n')
       } else {
-        fs.writeFileSync(path, 'orig, dest, cnt' + '\n')
-        fs.appendFileSync(path, csv + '\n')
+        mkdirp(path.dirname(outputFilePath))
+        fs.writeFileSync(outputFilePath, 'orig, dest, cnt' + '\n')
+        fs.appendFileSync(outputFilePath, csv + '\n')
       }
       resolve()
     })

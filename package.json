@@ -1,7 +1,8 @@
 {
-  "name": "aggregate_airport_mobility",
+  "name": "magicbox_aggregate_mobility",
   "version": "1.0.0",
-  "description": "",
+  "description": "Aggregates Amadeus airport to airport mobility by municipality/state in CSV format",
+  "repository": "https://github.com/unicef/magicbox-aggregate-mobility",
   "main": "index.js",
   "scripts": {
     "pretest": "if [ ! -f ./config.js ]; then cp config_sample.js config.js; fi",
@@ -10,7 +11,7 @@
     "precommit": "npm run lint"
   },
   "author": "",
-  "license": "ISC",
+  "license": "BSD-3-Clause",
   "dependencies": {
     "async": "^2.4.1",
     "bluebird": "^3.5.0",
@@ -24,6 +25,7 @@
     "eslint": "^3.19.0",
     "eslint-config-google": "^0.7.1",
     "husky": "^0.14.3",
+    "mkdirp": "^0.5.1",
     "mocha": "^3.4.2",
     "mock-require": "^2.0.2"
   }

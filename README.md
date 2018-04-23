@@ -1,5 +1,5 @@
-Aggregate Airport Mobility
-==========================
+MagicBox Aggregate Mobility
+===========================
 
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Chat on Gitter](https://badges.gitter.im/unicef-innovation-dev/Lobby.png)](https://gitter.im/unicef-innovation-dev/Lobby)
@@ -54,8 +54,8 @@ Hadoop and Spark from the source, make sure they are on your system `PATH` (e.g.
 Run these commands at a command prompt.
 
 ```bash
-git clone https://github.com/unicef/aggregate_airport_mobility.git
-cd aggregate_airport_mobility
+git clone https://github.com/unicef/magicbox-aggregate-mobility.git
+cd magicbox-aggregate-mobility
 cp config_sample.js config.js
 npm install
 ```
@@ -68,10 +68,12 @@ npm install
 There are a few different options to set in the `config.js` file:
 
 * **`zipped`**: Stores compressed Amadeus traffic data
-* **`unzipped`**: Where decompressed Amadeus data is moved
 * **`processed`**: Final location of processed data
-* **`aggregated`**: _Deprecated_
-* **`temp`**: Where Spark outputs results
+* **`spark_path`**: Install location of spark shell binary `spark-shell`. 
+Leave blank if `spark-shell` is in your path. 
+_note:_ please include a trailing slash. 
+* **`aggregation_level`**: value in form adminX where X is one of 0, 1, 2, 3, 4 or 5. 
+The administrative level boundary level data should be aggregated to.    
 * **`fields`**: Filtered fields from raw Amadeus data
 
 To get the compressed data…
@@ -97,13 +99,13 @@ In this repository you can find a Dockerfile to build an image of this project.
 Build the image:
 
 ```
-docker build -t unicef/aggregate_airport_mobility .
+docker build -t unicef/magicbox_aggregate_mobility .
 ```
 
 You can then run this project within docker using:
 
 ```
-docker run --rm -v $(pwd):/app unicef/aggregate_airport_mobility node main.js
+docker run --rm -v $(pwd):/app unicef/magicbox_aggregate_mobility node main.js
 ```
 
 ## Running tests
@@ -119,8 +121,8 @@ Check out the following:
 
 1. [MagicBox contributing
    guidelines](https://github.com/unicef/magicbox/wiki/Contributing-guidelines)
-2. [aggregate_airport_mobility
-   checklist](https://github.com/unicef/aggregate_airport_mobility/blob/master/.github/CONTRIBUTING.md)
+2. [magicbox-aggregate-mobility
+   checklist](https://github.com/unicef/magicbox-aggregate-mobility/blob/master/.github/CONTRIBUTING.md)
 
 
 ## Legal
