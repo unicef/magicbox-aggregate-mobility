@@ -63,7 +63,7 @@ val path_temp = paramsArray(3)
 
 // Create RDD from CSV file
 // RDD for mobility data
-val mobil = sqlContext.read.format("com.databricks.spark.csv").option("header", "true").option("inferSchema", "true").option("delimiter", "\t").load(path_unzipped + filename)
+val mobil = sqlContext.read.format("com.databricks.spark.csv").option("header", "true").option("inferSchema", "true").option("delimiter", "\t").load(path_unzipped + "/" + filename)
 mobil.registerTempTable("mobils")
 
 // Run the query
