@@ -72,7 +72,7 @@ const process_file = (
       // Split line by ',' and map items to fields: ['year', 'week', 'count', 'origin', 'destination']
       // vals is an object: {year: 2017, week: 3, origin: 'US', destination: 'MX', cnt: 100}
       let vals = l.split(/,/).reduce((h, val, index) => {
-        h[fields[index++]] = val
+        h[fields[index]] = val
         return h
       }, {})
 
