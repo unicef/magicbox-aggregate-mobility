@@ -92,6 +92,10 @@ async.waterfall([
       return process_file(file, date_lookup)
     }, {concurreny: 1})
     .then(callback)
+    .catch( (err) => {
+        console.log('Failed, bailing out...')
+        process.exit(1)
+    })
   }
 ], () => {
     console.log('Done with all!')
@@ -132,6 +136,8 @@ const process_file = (file, date_lookup) => {
           path_temp
         ).then(() => {
           callback(null, unzipped_file)
+        }).catch((e) => {
+          reject(e)
         })
       },
 
@@ -150,6 +156,7 @@ const process_file = (file, date_lookup) => {
         )
         .catch((err) => {
           console.log(err)
+          reject(err)
         })
         .then(() => {
           console.log('Done combining')
@@ -162,4 +169,3 @@ const process_file = (file, date_lookup) => {
       }, 1)
   })
 }
-
