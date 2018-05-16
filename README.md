@@ -3,7 +3,7 @@ MagicBox Aggregate Mobility
 
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Chat on Gitter](https://badges.gitter.im/unicef-innovation-dev/Lobby.png)](https://gitter.im/unicef-innovation-dev/Lobby)
-[![Build Status](https://travis-ci.org/unicef/aggregate_airport_mobility.svg?branch=master)](https://travis-ci.org/unicef/aggregate_airport_mobility)
+[![Build Status](https://travis-ci.org/unicef/magicbox-aggregate-mobility.svg?branch=master)](https://travis-ci.org/unicef/magicbox-aggregate-mobility)
 
 Aggregate Amadeus mobility data by administrative boundary to produce CSV output
 
@@ -69,10 +69,10 @@ There are a few different options to set in the `config.js` file:
 
 * **`zipped`**: Stores compressed Amadeus traffic data
 * **`processed`**: Final location of processed data
-* **`spark_path`**: Install location of spark shell binary `spark-shell`. 
-Leave blank if `spark-shell` is in your path. 
-_note:_ please include a trailing slash. 
-* **`aggregation_level`**: value in form adminX where X is one of 0, 1, 2, 3, 4 or 5. 
+* **`spark_path`**: Install location of spark shell binary `spark-shell`.
+Leave blank if `spark-shell` is in your path.
+_note:_ please include a trailing slash.
+* **`aggregation_level`**: value in form adminX where X is one of 0, 1, 2, 3, 4 or 5.
 The administrative level boundary level data should be aggregated to.    
 * **`fields`**: Filtered fields from raw Amadeus data
 
